@@ -1,4 +1,4 @@
-# 🚀 SAK – Stellar Automated KYC Vault  
+# SAK – Stellar Automated KYC Vault
 *A unified, secure and permission-based KYC system for Stellar Anchors.*
 
 ---
@@ -11,152 +11,146 @@
 - [5. MVP Architecture](#mvp-architecture)
 - [6. Success Criteria](#success-criteria)
 - [7. Team](#team)
+
 ---
 
-## 1️⃣ **1. Problem Statement**
+<a id="problem-statement"></a>
+## 1. Problem Statement
 
-### ❗ What real-world problem are you solving?
+### What real-world problem are you solving?
 Stellar Anchors currently run manual, isolated and repetitive KYC/AML processes.  
 Each performs verification **from scratch**, even if the user was already verified elsewhere.  
-This leads to:
+This creates:
 
 - Long onboarding times  
 - High operational cost  
 - Duplicate document uploads  
 - Increased security risk  
-- Poor scalability across the network  
+- Poor scalability across the network
 
----
-
-### 👥 Who is affected?
+### Who is affected?
 - Regulated Anchors  
 - Users interacting with multiple anchors  
 - On/off-ramp companies  
-- Platforms with compliance requirements  
+- Platforms requiring compliance
+
+### Why is this urgent now?
+The Stellar ecosystem is growing, and recent security incidents such as the July 2024 Fractal ID breach exposed a major vulnerability: multiple companies store full KYC copies, multiplying the attack surface.  
+Stellar users typically interact with several anchors, making the risk worse.  
+A unified, encrypted, permission-controlled vault is needed now.
 
 ---
 
-### 🔥 Why is this urgent now?
-The Stellar ecosystem is growing, and recent security incidents such as the **July 2024 Fractal ID breach** (full access to KYC documents and personal data) revealed a critical vulnerability:  
-**multiple companies store full KYC copies**, multiplying the attack surface.
+<a id="target-users--needs"></a>
+## 2. Target Users & Needs
 
-Because Stellar users interact with **several anchors**, this risk becomes even larger.
-
-➡️ A unified, secure, encrypted, permission-controlled vault is needed **now**.
-
----
-
-## 2️⃣ **2. Target Users & Needs**
-
-### 🎯 Primary User
+### Primary User
 **Stellar network anchors**
 
-### 💡 Core Need
+### Core Need
 - Reduce compliance workload  
-- Remove duplicated KYC processes  
+- Remove duplicated KYC  
 - Lower operational cost  
 - Improve onboarding speed  
-- Maintain full regulatory compliance  
+- Maintain regulatory compliance
 
-### 🛠 Current Workaround
-Each anchor runs its own isolated KYC:
-
+### Current Workaround
+Each anchor runs a separate KYC process:
 - Custom forms  
 - Manual verification  
-- Re-uploaded documents  
-- Non-reusable flows  
+- Re-uploading documents  
+- Non-reusable processes
 
 ---
 
-## 3️⃣ **3. Solution Overview**
+<a id="solution-overview"></a>
+## 3. Solution Overview
 
-### 🧠 3.1 Main Idea
-**SAK** is a unified and automated KYC system with an encrypted Vault compatible with **SEP-12**.  
-Users complete KYC **once**, and anchors request access via permissions.
+### Main Idea
+**SAK** provides a unified and automated KYC system with an encrypted Vault using SEP-12.  
+A user completes KYC **once**, and anchors can request access through permissions.
 
 This eliminates:
-- Repeated document uploads  
-- Repeated selfies  
+- Repeated uploads  
+- Repeated identity capture  
 - Manual re-verification  
-- Duplicate databases that increase risk  
+- Duplicate sensitive databases
 
----
-
-### 🧭 User Journey
-1. User completes KYC once with **SAK**  
-2. SAK validates documents, country and KYC level (**BASE / SEPA / AAA**)  
+### User Journey
+1. User completes KYC once via SAK  
+2. SAK validates documents, region and KYC tier (BASE / SEPA / AAA)  
 3. Anchor requests access  
 4. User approves  
-5. Anchor enables deposits, withdrawals or RWA activity  
+5. Anchor enables deposits, withdrawals or RWA operations
 
----
-
-### ⭐ 3.2 Why Stellar?
-SAK aligns perfectly with Stellar’s anchor model:
-
-- Uses **SEP-12**  
+### Why Stellar?
+- Built around SEP-12  
 - Reduces compliance workload  
-- Standardizes KYC flows across anchors  
-- Enhances remittances, payments & RWA processes  
-- Soroban smart contracts enable on-chain auditing and permission logic  
+- Standardizes KYC flows  
+- Supports remittances, payments & RWA  
+- Soroban enables permission control & auditing
 
 ---
 
-## 4️⃣ **4. Core Features**
+<a id="core-features"></a>
+## 4. Core Features
 
-### 🔐 Feature 1: One-Time KYC Submission
-User completes KYC only once using SAK’s interface.
-Working if: system stores and retrieves user KYC.
+### Feature 1: One-Time KYC Submission
+User completes KYC only once through SAK.  
+**Working if:** The system stores and retrieves the KYC record.
 
-### 🏷 Feature 2: Anchor KYC Lookup 
-Anchors “request” KYC and receive status + level.
-Working if: anchor sees verified user.
+### Feature 2: Anchor KYC Lookup
+Anchors request KYC data and receive status + verification tier.  
+**Working if:** Anchor sees verified user information.
 
-### 🛂 Feature 3: Auto KYC Level Assignment
-Region + documents → assigns BASE / SEPA / AAA.
-Working if: user gets the correct tier.
+### Feature 3: Automatic Tier Assignment
+Document type + region → automatic assignment of **BASE / SEPA / AAA**.  
+**Working if:** User receives correct tier.
 
-### 🚀 🎯 Stretch Goal (Optional)
-Consent-based access panel
-Soroban smart contract (permissions/audit)
-Full encrypted Vault implementation
-
----
-
-## 5️⃣ **5. MVP Architecture**
-
-### 🧱 Stack
-- **Frontend:** Next.js - Tailwind.js   
-- **Backend:** Node.js
-- **Smart Contracts** Soroban contracts
+### Stretch Goal
+- Consent-based access panel  
+- Soroban permissions smart contract  
+- Full encrypted vault
 
 ---
 
-## 6️⃣ **6. Success Criteria (Hackathon)**
+<a id="mvp-architecture"></a>
+## 5. MVP Architecture
 
-- ✔ User completes KYC once via SAK  
-- ✔ Anchor reads KYC without duplicate documents  
-- ✔ Automatic level assignment (BASE / SEPA / AAA)  
-- ✔ User can grant/revoke access to anchors  
-- ✔ Onboarding to a second anchor takes ~0 minutes  
+### Stack
+- **Frontend:** Next.js + Tailwind CSS  
+- **Backend:** Node.js  
+- **Smart Contracts:** Soroban (permissions + audit)  
+- **Database:** PostgreSQL  
+- **Storage:** Encrypted off-chain Vault (or simulated for demo)
+
+### Flow
+User → Frontend → API → Vault/DB → Anchor (mock SEP-12 request) → Stellar
 
 ---
 
-## 7️⃣ **7. Team**
+<a id="success-criteria"></a>
+## 6. Success Criteria
 
-### 🏷 Team Name
-**SAK Stellar Anchor KYC**
+- A user can complete KYC once via SAK  
+- An anchor can read KYC data without duplication  
+- Automatic KYC tier assignment works  
+- User can grant/revoke anchor access  
+- Onboarding to a second anchor is immediate
 
-### 👤 Members
+---
 
-- **Leandro Masotti** – Backend  
-- **Manuel Jimenez Garro** – Front-end - Product  
-- **Gonzalo Chacón** – Product  
-- **Augusto Fabian Rios Choque** – Smart Contracts  
-- **Diego Raúl Barrionuevo** – Smart Contracts  
+<a id="team"></a>
+## 7. Team
 
+**Team Name:** SAK – Stellar Anchor KYC
 
-### 🔗 Links
+**Members**
+- Leandro Masotti – Backend  
+- Manuel Jimenez Garro – Frontend & Product  
+- Gonzalo Chacón – Product  
+- Augusto Fabian Rios Choque – Smart Contracts  
+- Diego Raúl Barrionuevo – Smart Contracts
+
+**Links**
 - GitHub: https://github.com/SAK-Stellar-Anchor-KYC
-
----
