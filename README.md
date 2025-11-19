@@ -3,15 +3,14 @@
 
 ---
 
-## 📑 Table of Contents
-- [1. Problem Statement](#1-problem-statement)
-- [2. Target Users & Needs](#2-target-users--needs)
-- [3. Solution Overview](#3-solution-overview)
-- [4. Core Features](#4-core-features)
-- [5. MVP Architecture](#5-mvp-architecture)
-- [6. Success Criteria](#6-success-criteria)
-- [7. Team](#7-team)
-
+## Table of Contents
+- [1. Problem Statement](#problem-statement)
+- [2. Target Users & Needs](#target-users--needs)
+- [3. Solution Overview](#solution-overview)
+- [4. Core Features](#core-features)
+- [5. MVP Architecture](#mvp-architecture)
+- [6. Success Criteria](#success-criteria)
+- [7. Team](#team)
 ---
 
 ## 1️⃣ **1. Problem Statement**
