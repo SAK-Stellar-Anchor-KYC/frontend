@@ -103,22 +103,24 @@ SAK aligns perfectly with Stellar’s anchor model:
 
 ---
 
-## 4️⃣ **4. Core Features (Hackathon Scope)**
+## 4️⃣ **4. Core Features**
 
-### 🔐 Feature 1: Unified KYC Vault (SEP-12 Compatible)
-KYC **once**, reuse everywhere.  
-✔ Working if: an anchor receives verification without repeated documents.
+### 🔐 Feature 1: One-Time KYC Submission
+User completes KYC only once using SAK’s interface.
+Working if: system stores and retrieves user KYC.
 
-### 🏷 Feature 2: Automatic KYC Levels  
-Assigns **BASE / SEPA / AAA** based on region & risk.  
-✔ Working if: the level is computed and delivered correctly.
+### 🏷 Feature 2: Anchor KYC Lookup 
+Anchors “request” KYC and receive status + level.
+Working if: anchor sees verified user.
 
-### 🛂 Feature 3: Consent-Based Access  
-User decides what each anchor can access.  
-✔ Working if: the anchor receives only what the user allowed.
+### 🛂 Feature 3: Auto KYC Level Assignment
+Region + documents → assigns BASE / SEPA / AAA.
+Working if: user gets the correct tier.
 
-### 🚀 Stretch Goal  
-Soroban contract for on-chain permissions and audit logs.
+### 🚀 🎯 Stretch Goal (Optional)
+Consent-based access panel
+Soroban smart contract (permissions/audit)
+Full encrypted Vault implementation
 
 ---
 
