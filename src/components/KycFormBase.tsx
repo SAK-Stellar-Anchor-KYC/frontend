@@ -49,12 +49,10 @@ export const KycFormBase: React.FC = () => {
     try {
       const record = await createKycRecord('base', formData as KycBaseData);
       if (record) {
-        alert('Base KYC completed successfully');
-        router.push('/dashboard');
+        router.push('/kyc/success?type=base');
       }
     } catch (error) {
-      alert('Failed to submit KYC');
-    } finally {
+      setErrors({ submit: 'Failed to submit KYC. Please try again.' });
       setSubmitting(false);
     }
   };
@@ -137,6 +135,12 @@ export const KycFormBase: React.FC = () => {
         required
       />
       {errors.documentIdUrl && <p className="text-sm text-crypto-error mt-1">{errors.documentIdUrl}</p>}
+
+      {errors.submit && (
+        <div className="px-4 py-3 bg-crypto-error bg-opacity-10 border border-crypto-error rounded-lg">
+          <p className="text-sm text-crypto-error">{errors.submit}</p>
+        </div>
+      )}
 
       <button
         type="submit"

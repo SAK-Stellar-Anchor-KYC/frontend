@@ -63,13 +63,16 @@ export const encryptData = async (
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const encodedData = new TextEncoder().encode(JSON.stringify(data));
 
+  // Create a new ArrayBuffer with only the necessary bytes
+  const dataBuffer = new Uint8Array(encodedData).buffer;
+
   const encryptedData = await crypto.subtle.encrypt(
     {
       name: ALGORITHM,
       iv: iv,
     },
     key,
-    encodedData
+    dataBuffer as ArrayBuffer
   );
 
   // Prepend IV to encrypted data
@@ -113,7 +116,8 @@ export const decryptData = async (
  */
 export const hashData = async (data: string): Promise<string> => {
   const encodedData = new TextEncoder().encode(data);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', encodedData);
+  const dataBuffer = new Uint8Array(encodedData).buffer;
+  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer as ArrayBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 };

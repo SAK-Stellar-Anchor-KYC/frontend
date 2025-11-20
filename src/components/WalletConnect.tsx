@@ -1,10 +1,50 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useWallet } from '@/hooks/useWallet';
+import { shortenPublicKey } from '@/lib/stellar';
 
 export const WalletConnect: React.FC = () => {
-  const { connect, isConnecting, error } = useWallet();
+  const router = useRouter();
+  const { connect, isConnecting, error, isConnected, publicKey } = useWallet();
+
+  // Redirect to dashboard if already connected
+  useEffect(() => {
+    if (isConnected && publicKey) {
+      router.push('/dashboard');
+    }
+  }, [isConnected, publicKey, router]);
+
+  // If already connected, show success message briefly before redirect
+  if (isConnected && publicKey) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+        <div className="w-24 h-24 bg-gradient-crypto rounded-full flex items-center justify-center">
+          <svg 
+            className="w-12 h-12 text-white" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" 
+            />
+          </svg>
+        </div>
+
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold text-dark-text">Wallet Connected</h1>
+          <p className="text-dark-textMuted max-w-md">
+            Your wallet {shortenPublicKey(publicKey, 8)} is connected. Redirecting to dashboard...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">

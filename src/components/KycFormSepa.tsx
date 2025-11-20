@@ -45,12 +45,10 @@ export const KycFormSepa: React.FC = () => {
     try {
       const record = await createKycRecord('sepa', formData as KycSepaData);
       if (record) {
-        alert('Intermediate KYC completed successfully');
-        router.push('/dashboard');
+        router.push('/kyc/success?type=sepa');
       }
     } catch (error) {
-      alert('Failed to submit KYC');
-    } finally {
+      setErrors({ submit: 'Failed to submit KYC. Please try again.' });
       setSubmitting(false);
     }
   };
@@ -174,6 +172,12 @@ export const KycFormSepa: React.FC = () => {
         />
         {errors.iban && <p className="text-sm text-crypto-error mt-1">{errors.iban}</p>}
       </div>
+
+      {errors.submit && (
+        <div className="px-4 py-3 bg-crypto-error bg-opacity-10 border border-crypto-error rounded-lg">
+          <p className="text-sm text-crypto-error">{errors.submit}</p>
+        </div>
+      )}
 
       <button
         type="submit"

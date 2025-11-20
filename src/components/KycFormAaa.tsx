@@ -50,10 +50,8 @@ export const KycFormAaa: React.FC = () => {
         amlScreeningResult: 'OK',
         amlScreeningDate: new Date().toISOString(),
       }));
-      
-      alert('AML Screening completed: Result OK');
     } catch (error: any) {
-      alert(error.message || 'Failed to complete AML screening');
+      setErrors((prev: any) => ({ ...prev, amlScreening: error.message || 'Failed to complete AML screening' }));
     } finally {
       setAmlScreening(false);
     }
@@ -72,12 +70,10 @@ export const KycFormAaa: React.FC = () => {
     try {
       const record = await createKycRecord('aaa', formData as KycAaaData);
       if (record) {
-        alert('Advanced KYC completed successfully');
-        router.push('/dashboard');
+        router.push('/kyc/success?type=aaa');
       }
     } catch (error) {
-      alert('Failed to submit KYC');
-    } finally {
+      setErrors({ submit: 'Failed to submit KYC. Please try again.' });
       setSubmitting(false);
     }
   };
@@ -250,6 +246,12 @@ export const KycFormAaa: React.FC = () => {
         )}
         {errors.amlScreeningResult && <p className="text-sm text-crypto-error mt-1">{errors.amlScreeningResult}</p>}
       </div>
+
+      {errors.submit && (
+        <div className="px-4 py-3 bg-crypto-error bg-opacity-10 border border-crypto-error rounded-lg">
+          <p className="text-sm text-crypto-error">{errors.submit}</p>
+        </div>
+      )}
 
       <button
         type="submit"
