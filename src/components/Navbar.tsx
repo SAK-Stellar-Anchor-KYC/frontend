@@ -35,6 +35,12 @@ export const Navbar: React.FC = () => {
               >
                 KYC
               </Link>
+              <Link 
+              href="/api-docs" 
+              className="text-dark-textMuted hover:text-dark-text transition-colors"
+            >
+              API Docs
+            </Link>
             </div>
           )}
 
