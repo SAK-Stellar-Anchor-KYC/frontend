@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Layout } from '@/components/Layout';
 import Link from 'next/link';
 
-export default function KycSuccessPage() {
+function KycSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const kycType = searchParams.get('type') || 'base';
@@ -96,6 +96,20 @@ export default function KycSuccessPage() {
         </div>
       </div>
     </Layout>
+  );
+}
+
+export default function KycSuccessPage() {
+  return (
+    <Suspense fallback={
+      <Layout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="w-16 h-16 border-4 border-crypto-primary border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </Layout>
+    }>
+      <KycSuccessContent />
+    </Suspense>
   );
 }
 
