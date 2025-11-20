@@ -257,9 +257,20 @@ export default function LandingPage() {
                   <span className="text-2xl font-bold text-white">4</span>
                 </div>
                 <h3 className="text-lg font-semibold text-dark-text mb-2">Get Verified</h3>
-                <p className="text-sm text-dark-muted">
+                <p className="text-sm text-dark-muted mb-3">
                   Receive your verification status and access blockchain services instantly.
                 </p>
+                <a
+                  href="https://anchors.stellar.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-sm text-crypto-primary hover:text-crypto-primaryHover transition-colors"
+                >
+                  View Stellar Anchors
+                  <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
               </div>
             </div>
           </div>
