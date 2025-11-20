@@ -1,51 +1,90 @@
-import { isConnected, getPublicKey, signTransaction } from '@stellar/freighter-api';
+import { 
+  StellarWalletsKit, 
+  WalletNetwork, 
+  allowAllModules,
+  FREIGHTER_ID,
+  XBULL_ID,
+  ALBEDO_ID
+} from '@creit.tech/stellar-wallets-kit';
+
+// Create a singleton instance of Stellar Wallets Kit
+let walletKit: StellarWalletsKit | null = null;
+let currentPublicKey: string | null = null;
+let currentWalletId: string | null = null;
 
 /**
- * Check if Freighter wallet is installed
+ * Get or create the Stellar Wallets Kit instance
  */
-export const isFreighterInstalled = async (): Promise<boolean> => {
-  try {
-    return await isConnected();
-  } catch (error) {
-    return false;
+export const getStellarWalletsKit = (): StellarWalletsKit => {
+  if (!walletKit) {
+    walletKit = new StellarWalletsKit({
+      network: WalletNetwork.TESTNET,
+      selectedWalletId: FREIGHTER_ID, // Default to Freighter
+      modules: allowAllModules(), // Support all available wallets
+    });
   }
+  return walletKit;
 };
 
 /**
- * Request connection to Freighter wallet
+ * Connect to a Stellar wallet
+ * @param walletId - Optional wallet ID (FREIGHTER_ID, XBULL_ID, ALBEDO_ID, etc.)
  */
-export const connectFreighter = async (): Promise<string> => {
+export const connectWallet = async (walletId?: string): Promise<string> => {
   try {
-    const publicKey = await getPublicKey();
+    const kit = getStellarWalletsKit();
     
-    if (!publicKey) {
-      throw new Error('Failed to get public key from Freighter');
+    if (walletId) {
+      kit.setWallet(walletId);
+      currentWalletId = walletId;
     }
     
-    return publicKey;
+    // Open modal for wallet selection
+    await kit.openModal({
+      onWalletSelected: async (option) => {
+        kit.setWallet(option.id);
+        currentWalletId = option.id;
+      }
+    });
+    
+    // Get the public key from the selected wallet
+    const { address } = await kit.getAddress();
+    
+    if (!address) {
+      throw new Error('Failed to get public key from wallet');
+    }
+    
+    currentPublicKey = address;
+    return address;
   } catch (error: any) {
-    if (error.message?.includes('User declined')) {
+    if (error.message?.includes('User declined') || error.message?.includes('rejected')) {
       throw new Error('Connection request declined by user');
     }
-    throw new Error('Failed to connect to Freighter wallet');
+    throw new Error('Failed to connect to wallet');
   }
 };
 
 /**
- * Sign a message with Freighter wallet
+ * Get the currently selected wallet ID
+ */
+export const getSelectedWalletId = (): string | null => {
+  return currentWalletId;
+};
+
+/**
+ * Sign a transaction with the connected wallet
  * Used for AAA KYC verification
  */
-export const signMessage = async (message: string): Promise<string> => {
+export const signTransaction = async (xdr: string): Promise<string> => {
   try {
-    // Create a simple transaction to sign
-    // In production, implement proper message signing
-    const result = await signTransaction(message, { network: 'TESTNET' });
-    return result;
+    const kit = getStellarWalletsKit();
+    const { signedTxXdr } = await kit.signTransaction(xdr);
+    return signedTxXdr;
   } catch (error: any) {
-    if (error.message?.includes('User declined')) {
+    if (error.message?.includes('User declined') || error.message?.includes('rejected')) {
       throw new Error('Signature request declined by user');
     }
-    throw new Error('Failed to sign message');
+    throw new Error('Failed to sign transaction');
   }
 };
 
