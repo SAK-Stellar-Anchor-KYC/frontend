@@ -10,18 +10,18 @@ const config: Config = {
     extend: {
       colors: {
         dark: {
-          bg: '#0a0b0d',
-          card: '#111214',
-          cardHover: '#1a1b1f',
-          border: '#2d2e32',
-          text: '#e4e4e7',
-          textMuted: '#a1a1aa',
+          bg: '#000000',
+          card: '#0a0a0a',
+          cardHover: '#1a1a1a',
+          border: '#333333',
+          text: '#ffffff',
+          textMuted: '#cccccc',
         },
         crypto: {
-          primary: '#6366f1',
-          primaryHover: '#4f46e5',
-          secondary: '#8b5cf6',
-          accent: '#06b6d4',
+          primary: '#FF6B35',
+          primaryHover: '#FF4500',
+          secondary: '#FFA500',
+          accent: '#FF8C00',
           success: '#10b981',
           warning: '#f59e0b',
           error: '#ef4444',
@@ -29,7 +29,7 @@ const config: Config = {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-crypto': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        'gradient-crypto': 'linear-gradient(135deg, #FF4500 0%, #FFA500 100%)',
       },
     },
   },
