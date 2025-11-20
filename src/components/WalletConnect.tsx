@@ -38,7 +38,7 @@ export const WalletConnect: React.FC = () => {
       )}
 
       <button
-        onClick={connect}
+        onClick={() => connect()}
         disabled={isConnecting}
         className="px-8 py-4 bg-gradient-crypto text-white rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
       >
@@ -55,21 +55,33 @@ export const WalletConnect: React.FC = () => {
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            <span>Connect Freighter</span>
+            <span>Connect Wallet</span>
           </>
         )}
       </button>
 
       <div className="text-center space-y-2 max-w-md">
         <p className="text-sm text-dark-textMuted">
-          Don&apos;t have Freighter installed?{' '}
+          Supports Freighter, xBull, Albedo, and other Stellar wallets.
+        </p>
+        <p className="text-xs text-dark-textMuted">
+          Don&apos;t have a wallet?{' '}
           <a 
             href="https://www.freighter.app/" 
             target="_blank" 
             rel="noopener noreferrer"
             className="text-crypto-primary hover:text-crypto-primaryHover transition-colors"
           >
-            Download it here
+            Download Freighter
+          </a>
+          {' '}or{' '}
+          <a 
+            href="https://xbull.app/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-crypto-primary hover:text-crypto-primaryHover transition-colors"
+          >
+            xBull
           </a>
         </p>
       </div>
