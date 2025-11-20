@@ -3,16 +3,17 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { WalletState } from '@/types';
 import {
-  connectFreighter,
-  isFreighterInstalled,
+  connectWallet,
+  getSelectedWalletId,
   shouldUseMockWallet,
   mockWallet,
   isValidPublicKey,
 } from '@/lib/stellar';
 
 interface WalletContextType extends WalletState {
-  connect: () => Promise<void>;
+  connect: (walletId?: string) => Promise<void>;
   disconnect: () => void;
+  selectedWalletId: string | null;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -24,11 +25,13 @@ export const WalletProvider = ({ children }: { children: any }) => {
     isConnecting: false,
     error: null,
   });
+  const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null);
 
   // Check for existing connection on mount
   useEffect(() => {
     const checkConnection = async () => {
       const storedPublicKey = localStorage.getItem('stellar_public_key');
+      const storedWalletId = localStorage.getItem('stellar_wallet_id');
       
       if (storedPublicKey && isValidPublicKey(storedPublicKey)) {
         setWalletState({
@@ -37,13 +40,14 @@ export const WalletProvider = ({ children }: { children: any }) => {
           isConnecting: false,
           error: null,
         });
+        setSelectedWalletId(storedWalletId);
       }
     };
 
     checkConnection();
   }, []);
 
-  const connect = async () => {
+  const connect = async (walletId?: string) => {
     setWalletState(prev => ({ ...prev, isConnecting: true, error: null }));
 
     try {
@@ -53,17 +57,17 @@ export const WalletProvider = ({ children }: { children: any }) => {
         // Use mock wallet for development
         publicKey = await mockWallet.connect();
       } else {
-        // Check if Freighter is installed
-        const installed = await isFreighterInstalled();
+        // Connect using Stellar Wallets Kit
+        publicKey = await connectWallet(walletId);
         
-        if (!installed) {
-          throw new Error(
-            'Freighter wallet is not installed. Please install it from freighter.app'
-          );
+        // Get the selected wallet ID after connection
+        const connectedWalletId = getSelectedWalletId();
+        setSelectedWalletId(connectedWalletId);
+        
+        // Store wallet ID
+        if (connectedWalletId) {
+          localStorage.setItem('stellar_wallet_id', connectedWalletId);
         }
-
-        // Connect to Freighter
-        publicKey = await connectFreighter();
       }
 
       // Store public key
@@ -87,6 +91,8 @@ export const WalletProvider = ({ children }: { children: any }) => {
 
   const disconnect = () => {
     localStorage.removeItem('stellar_public_key');
+    localStorage.removeItem('stellar_wallet_id');
+    setSelectedWalletId(null);
     setWalletState({
       publicKey: null,
       isConnected: false,
@@ -96,7 +102,7 @@ export const WalletProvider = ({ children }: { children: any }) => {
   };
 
   return (
-    <WalletContext.Provider value={{ ...walletState, connect, disconnect }}>
+    <WalletContext.Provider value={{ ...walletState, connect, disconnect, selectedWalletId }}>
       {children}
     </WalletContext.Provider>
   );
