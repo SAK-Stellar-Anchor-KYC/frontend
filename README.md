@@ -122,6 +122,7 @@ Document type + region → automatic assignment of **BASE / SEPA / AAA**.
 - **Backend:** Node.js  
 - **Smart Contracts:** Soroban (permissions + audit)  
 - **Database:** PostgreSQL  
+- **ZK:** Noir - Aztec  
 - **Storage:** Encrypted off-chain Vault (or simulated for demo)
 
 ### Flow
@@ -133,10 +134,11 @@ User → Frontend → API → Vault/DB → Anchor (mock SEP-12 request) → Stel
 ## 6. Success Criteria
 
 - A user can complete KYC once via SAK  
-- An anchor can read KYC data without duplication  
+- An anchor can read KYC data without duplication **
 - Automatic KYC tier assignment works  
-- User can grant/revoke anchor access  
+- User can grant/revoke anchor and users (bad actors) access * (to be checked with mentors) 
 - Onboarding to a second anchor is immediate
+- Onboarding users under a quick time of response. 
 
 ---
 
