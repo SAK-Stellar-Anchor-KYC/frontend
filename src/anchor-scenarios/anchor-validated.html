@@ -442,11 +442,11 @@
             <div class="wizard-steps">
                 <div class="step active" id="step-indicator-1">
                     <div class="step-number">1</div>
-                    <div class="step-label">Amount</div>
+                    <div class="step-label">KYC Verification</div>
                 </div>
                 <div class="step" id="step-indicator-2">
                     <div class="step-number">2</div>
-                    <div class="step-label">KYC Verification</div>
+                    <div class="step-label">Amount</div>
                 </div>
                 <div class="step" id="step-indicator-3">
                     <div class="step-number">3</div>
@@ -454,8 +454,52 @@
                 </div>
             </div>
 
-            <!-- Step 1: Amount Input -->
+            <!-- Step 1: KYC Verification -->
             <div class="wizard-content active" id="step-1">
+                <!-- Loading state -->
+                <div class="kyc-status" id="kyc-loading">
+                    <div class="spinner"></div>
+                    <div class="kyc-message">Verifying your identity...</div>
+                    <div class="kyc-powered">
+                        Secure validation using <strong>Zero-Knowledge Proofs</strong><br>
+                        Powered by <strong>SAK on Stellar Blockchain</strong>
+                    </div>
+                </div>
+
+                <!-- KYC Valid -->
+                <div class="kyc-status" id="kyc-valid" style="display: none;">
+                    <div class="kyc-icon success-icon">✓</div>
+                    <div class="kyc-message">KYC Verified!</div>
+                    <div class="kyc-powered">
+                        ✨ KYC validated by <strong>SAK</strong> using Zero-Knowledge Proofs<br>
+                        Secured by <strong>Stellar Blockchain</strong>
+                    </div>
+                    <button class="btn btn-primary" onclick="goToStep2()">
+                        Continue to Amount
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Amount Input -->
+            <div class="wizard-content" id="step-2">
+                <div class="alert alert-warning" style="border-left-color: #0ecb81; margin-bottom: 20px;">
+                    <p><strong>Your KYC Status:</strong></p>
+                    <p style="margin-top: 8px; font-size: 13px;">
+                        ✓ BASE Level - Verified<br>
+                        <span id="sepa-status" style="color: #848e9c;">⚠ SEPA Level - Not Verified</span><br>
+                        <span id="aaa-status" style="color: #848e9c;">⚠ AAA Level - Not Verified</span>
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Destination</label>
+                    <select class="form-input" id="destination-select">
+                        <option value="standard">Standard Transfer (BASE KYC)</option>
+                        <option value="europe">Send to Europe - SEPA (Requires SEPA KYC)</option>
+                        <option value="aaa">High Value Transfer - AAA (Requires AAA KYC)</option>
+                    </select>
+                </div>
+
                 <div class="exchange-rate">
                     Exchange rate: 1 USDT = 1,440.00 ARS
                 </div>
@@ -483,35 +527,89 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary" id="btn-step-1" onclick="goToStep2()" disabled>
+                <button class="btn btn-primary" id="btn-step-2" onclick="validateDestinationKYC()" disabled>
                     Continue
                 </button>
             </div>
 
-            <!-- Step 2: KYC Verification -->
-            <div class="wizard-content" id="step-2">
-                <!-- Loading state -->
-                <div class="kyc-status" id="kyc-loading">
-                    <div class="spinner"></div>
-                    <div class="kyc-message">Verifying your identity...</div>
-                    <div class="kyc-powered">
-                        Secure validation using <strong>Zero-Knowledge Proofs</strong><br>
-                        Powered by <strong>SAK on Stellar Blockchain</strong>
+            <!-- Step 2.5: Additional KYC for Europe -->
+            <div class="wizard-content" id="step-2-europe">
+                <div class="alert alert-warning">
+                    <p><strong>Additional Verification Required</strong></p>
+                    <p style="margin-top: 8px; font-size: 13px;">To send money to Europe via SEPA, we need additional banking information.</p>
+                </div>
+
+                <div class="kyc-powered" style="text-align: center; margin-bottom: 25px;">
+                    🔒 Secured by <strong>SAK</strong> on <strong>Stellar Blockchain</strong>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">IBAN or Bank Account Number</label>
+                    <input type="text" class="form-input" id="iban-input" placeholder="ES91 2100 0418 4502 0005 1332">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bank Name</label>
+                    <input type="text" class="form-input" id="bank-name-input" placeholder="Enter your bank name">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Account Holder Name</label>
+                    <input type="text" class="form-input" id="account-holder-input" placeholder="Enter account holder name">
+                </div>
+
+                <button class="btn btn-primary" id="btn-europe-verify" onclick="submitEuropeKYC()" disabled>
+                    Verify and Continue
+                </button>
+                <button class="btn btn-secondary" onclick="goToStep2()">
+                    Back
+                </button>
+            </div>
+
+            <!-- Step 2.5: Additional KYC for AAA -->
+            <div class="wizard-content" id="step-2-aaa">
+                <div class="alert alert-warning">
+                    <p><strong>Enhanced Identity Verification Required</strong></p>
+                    <p style="margin-top: 8px; font-size: 13px;">For high-value transfers (AAA level), we need enhanced identity verification.</p>
+                </div>
+
+                <div class="kyc-powered" style="text-align: center; margin-bottom: 25px;">
+                    🔒 Secured by <strong>SAK</strong> on <strong>Stellar Blockchain</strong>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Upload Selfie with ID Document</label>
+                    <div style="background-color: #2b3139; border: 2px dashed #474d57; border-radius: 6px; padding: 30px; text-align: center; cursor: pointer;" onclick="document.getElementById('selfie-input').click()">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📷</div>
+                        <div style="color: #848e9c; font-size: 14px;">Click to upload selfie</div>
+                        <div style="color: #848e9c; font-size: 12px; margin-top: 5px;">Hold your ID next to your face</div>
+                        <input type="file" id="selfie-input" accept="image/*" style="display: none;" onchange="handleFileUpload('selfie')">
+                        <div id="selfie-name" style="color: #0ecb81; margin-top: 10px; display: none;"></div>
                     </div>
                 </div>
 
-                <!-- KYC Valid -->
-                <div class="kyc-status" id="kyc-valid" style="display: none;">
-                    <div class="kyc-icon success-icon">✓</div>
-                    <div class="kyc-message">KYC Verified!</div>
-                    <div class="kyc-powered">
-                        ✨ KYC validated by <strong>SAK</strong> using Zero-Knowledge Proofs<br>
-                        Secured by <strong>Stellar Blockchain</strong>
+                <div class="form-group">
+                    <label class="form-label">Upload Video Verification</label>
+                    <div style="background-color: #2b3139; border: 2px dashed #474d57; border-radius: 6px; padding: 30px; text-align: center; cursor: pointer;" onclick="document.getElementById('video-input').click()">
+                        <div style="font-size: 48px; margin-bottom: 10px;">🎥</div>
+                        <div style="color: #848e9c; font-size: 14px;">Click to upload video</div>
+                        <div style="color: #848e9c; font-size: 12px; margin-top: 5px;">Record yourself stating your full name and today's date</div>
+                        <input type="file" id="video-input" accept="video/*" style="display: none;" onchange="handleFileUpload('video')">
+                        <div id="video-name" style="color: #0ecb81; margin-top: 10px; display: none;"></div>
                     </div>
-                    <button class="btn btn-primary" onclick="goToStep3()">
-                        Continue to Confirmation
-                    </button>
                 </div>
+
+                <div class="form-group">
+                    <label class="form-label">Proof of Address</label>
+                    <input type="text" class="form-input" id="address-input" placeholder="Enter your full residential address">
+                </div>
+
+                <button class="btn btn-primary" id="btn-aaa-verify" onclick="submitAAAKYC()" disabled>
+                    Verify and Continue
+                </button>
+                <button class="btn btn-secondary" onclick="goToStep2()">
+                    Back
+                </button>
             </div>
 
             <!-- Step 3: Confirmation -->
@@ -522,6 +620,10 @@
                 </div>
 
                 <div class="summary-box">
+                    <div class="summary-row">
+                        <span class="summary-label">Destination:</span>
+                        <span class="summary-value" id="final-destination">Standard Transfer</span>
+                    </div>
                     <div class="summary-row">
                         <span class="summary-label">Amount to convert:</span>
                         <span class="summary-value" id="final-amount-ars">$0.00 ARS</span>
@@ -540,8 +642,8 @@
                     </div>
                 </div>
 
-                <div class="kyc-powered" style="text-align: center; margin-bottom: 20px;">
-                    ✓ KYC validated by <strong>SAK</strong> on <strong>Stellar Blockchain</strong>
+                <div class="kyc-powered" id="kyc-level-info" style="text-align: center; margin-bottom: 20px;">
+                    ✓ KYC BASE validated by <strong>SAK</strong> on <strong>Stellar Blockchain</strong>
                 </div>
 
                 <button class="btn btn-primary" onclick="confirmTransaction()">
@@ -603,7 +705,20 @@
         const COMMISSION_RATE = 0.005; // 0.5%
         
         let currentAmount = 0;
-        const hasKYC = true; // Siempre tiene KYC validado en esta versión
+        let selectedDestination = 'standard';
+        
+        // Estados de KYC (solo BASE está verificado al inicio)
+        const kycLevels = {
+            base: true,      // Ya verificado
+            sepa: false,     // Necesita verificación
+            aaa: false       // Necesita verificación
+        };
+        
+        // Archivos subidos
+        let uploadedFiles = {
+            selfie: null,
+            video: null
+        };
 
         // Helper function to format numbers with thousand separators
         function formatNumber(num, decimals = 2) {
@@ -611,6 +726,24 @@
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             return parts.join('.');
         }
+
+        // Destination selector handler
+        document.getElementById('destination-select').addEventListener('change', function(e) {
+            selectedDestination = e.target.value;
+            // Recalculate if amount is already entered
+            if (currentAmount > 0) {
+                const commission = currentAmount * COMMISSION_RATE;
+                const amountAfterCommission = currentAmount - commission;
+                const usdtAmount = amountAfterCommission / EXCHANGE_RATE;
+
+                document.getElementById('amount-ars').textContent = `$${formatNumber(currentAmount)} ARS`;
+                document.getElementById('commission-ars').textContent = `$${formatNumber(commission)} ARS`;
+                document.getElementById('receive-usdt').textContent = `${formatNumber(usdtAmount, 4)} USDT`;
+
+                document.getElementById('summary-box').style.display = 'block';
+                document.getElementById('btn-step-2').disabled = false;
+            }
+        });
 
         // Amount input handler
         document.getElementById('amount-input').addEventListener('input', function(e) {
@@ -627,12 +760,47 @@
                 document.getElementById('receive-usdt').textContent = `${formatNumber(usdtAmount, 4)} USDT`;
 
                 document.getElementById('summary-box').style.display = 'block';
-                document.getElementById('btn-step-1').disabled = false;
+                document.getElementById('btn-step-2').disabled = false;
             } else {
                 document.getElementById('summary-box').style.display = 'none';
-                document.getElementById('btn-step-1').disabled = true;
+                document.getElementById('btn-step-2').disabled = true;
             }
         });
+
+        // Europe KYC form validation
+        function validateEuropeForm() {
+            const iban = document.getElementById('iban-input').value.trim();
+            const bankName = document.getElementById('bank-name-input').value.trim();
+            const accountHolder = document.getElementById('account-holder-input').value.trim();
+            
+            document.getElementById('btn-europe-verify').disabled = !(iban && bankName && accountHolder);
+        }
+
+        document.getElementById('iban-input').addEventListener('input', validateEuropeForm);
+        document.getElementById('bank-name-input').addEventListener('input', validateEuropeForm);
+        document.getElementById('account-holder-input').addEventListener('input', validateEuropeForm);
+
+        // AAA KYC form validation
+        function validateAAAForm() {
+            const address = document.getElementById('address-input').value.trim();
+            const hasSelfie = uploadedFiles.selfie !== null;
+            const hasVideo = uploadedFiles.video !== null;
+            
+            document.getElementById('btn-aaa-verify').disabled = !(address && hasSelfie && hasVideo);
+        }
+
+        document.getElementById('address-input').addEventListener('input', validateAAAForm);
+
+        // File upload handler
+        function handleFileUpload(type) {
+            const input = document.getElementById(`${type}-input`);
+            if (input.files && input.files[0]) {
+                uploadedFiles[type] = input.files[0];
+                document.getElementById(`${type}-name`).textContent = `✓ ${input.files[0].name}`;
+                document.getElementById(`${type}-name`).style.display = 'block';
+                validateAAAForm();
+            }
+        }
 
         function updateStepIndicator(step) {
             for (let i = 1; i <= 3; i++) {
@@ -648,24 +816,36 @@
         }
 
         function showStep(step) {
+            // Hide all steps
             for (let i = 1; i <= 4; i++) {
                 const stepElement = document.getElementById(`step-${i}`);
                 if (stepElement) {
                     stepElement.classList.remove('active');
                 }
             }
-            document.getElementById(`step-${step}`).classList.add('active');
-            if (step <= 3) {
+            // Hide additional KYC steps
+            const europeStep = document.getElementById('step-2-europe');
+            const aaaStep = document.getElementById('step-2-aaa');
+            if (europeStep) europeStep.classList.remove('active');
+            if (aaaStep) aaaStep.classList.remove('active');
+            
+            // Show requested step
+            const targetStep = document.getElementById(`step-${step}`);
+            if (targetStep) {
+                targetStep.classList.add('active');
+            }
+            
+            // Update step indicator (only for main steps 1-3)
+            if (typeof step === 'number' && step <= 3) {
                 updateStepIndicator(step);
+            } else if (step === '2-europe' || step === '2-aaa') {
+                // Additional KYC steps are still part of step 2
+                updateStepIndicator(2);
             }
         }
 
         function goToStep1() {
             showStep(1);
-        }
-
-        function goToStep2() {
-            showStep(2);
             
             // Reset KYC views
             document.getElementById('kyc-loading').style.display = 'block';
@@ -678,14 +858,168 @@
             }, 2000);
         }
 
+        function goToStep2() {
+            showStep(2);
+            // Update KYC status display when returning to step 2
+            updateKYCStatusDisplay();
+        }
+
+        function validateDestinationKYC() {
+            // Check if additional KYC is needed based on destination
+            if (selectedDestination === 'europe' && !kycLevels.sepa) {
+                // Show Europe KYC form - user needs SEPA verification
+                showStep('2-europe');
+            } else if (selectedDestination === 'aaa' && !kycLevels.aaa) {
+                // Show AAA KYC form - user needs AAA verification
+                showStep('2-aaa');
+            } else {
+                // KYC already validated or not needed (standard), go to confirmation
+                goToStep3();
+            }
+        }
+
+        function submitEuropeKYC() {
+            const iban = document.getElementById('iban-input').value.trim();
+            const bankName = document.getElementById('bank-name-input').value.trim();
+            const accountHolder = document.getElementById('account-holder-input').value.trim();
+
+            // Show loading state
+            const btn = document.getElementById('btn-europe-verify');
+            btn.disabled = true;
+            btn.textContent = 'Sending to SAK for verification...';
+
+            // Simulate API call to SAK for SEPA KYC validation
+            console.log('📤 Sending SEPA KYC data to SAK API:', {
+                kyc_level: 'SEPA',
+                iban: iban,
+                bank_name: bankName,
+                account_holder: accountHolder,
+                user_wallet: 'GDXXX...XXXX', // Wallet del usuario
+                timestamp: new Date().toISOString()
+            });
+
+            // Simulate network delay and SAK processing
+            setTimeout(() => {
+                btn.textContent = 'Validating with Zero-Knowledge Proofs...';
+                console.log('🔐 SAK is validating SEPA KYC using Zero-Knowledge Proofs...');
+                
+                setTimeout(() => {
+                    // SAK confirms verification
+                    kycLevels.sepa = true;
+                    btn.textContent = '✓ SEPA KYC Verified by SAK';
+                    btn.style.backgroundColor = '#0ecb81';
+                    
+                    console.log('✅ SAK API Response: SEPA KYC Verified successfully');
+                    console.log('📝 Verification stored on Stellar Blockchain');
+                    
+                    // Update KYC status display
+                    updateKYCStatusDisplay();
+                    
+                    // Continue to confirmation after showing success
+                    setTimeout(() => {
+                        goToStep3();
+                        // Reset button for next time
+                        btn.textContent = 'Verify and Continue';
+                        btn.style.backgroundColor = '';
+                    }, 1500);
+                }, 1500);
+            }, 2000);
+        }
+
+        function submitAAAKYC() {
+            const address = document.getElementById('address-input').value.trim();
+
+            // Show loading state
+            const btn = document.getElementById('btn-aaa-verify');
+            btn.disabled = true;
+            btn.textContent = 'Sending to SAK for verification...';
+
+            // Simulate API call to SAK for AAA KYC validation
+            console.log('📤 Sending AAA KYC data to SAK API:', {
+                kyc_level: 'AAA',
+                selfie: uploadedFiles.selfie.name,
+                video: uploadedFiles.video.name,
+                address: address,
+                user_wallet: 'GDXXX...XXXX', // Wallet del usuario
+                timestamp: new Date().toISOString()
+            });
+
+            // Simulate network delay and SAK processing
+            setTimeout(() => {
+                btn.textContent = 'Validating with Zero-Knowledge Proofs...';
+                console.log('🔐 SAK is validating AAA KYC using Zero-Knowledge Proofs...');
+                
+                setTimeout(() => {
+                    // SAK confirms verification
+                    kycLevels.aaa = true;
+                    btn.textContent = '✓ AAA KYC Verified by SAK';
+                    btn.style.backgroundColor = '#0ecb81';
+                    
+                    console.log('✅ SAK API Response: AAA KYC Verified successfully');
+                    console.log('📝 Verification stored on Stellar Blockchain');
+                    
+                    // Update KYC status display
+                    updateKYCStatusDisplay();
+                    
+                    // Continue to confirmation after showing success
+                    setTimeout(() => {
+                        goToStep3();
+                        // Reset button for next time
+                        btn.textContent = 'Verify and Continue';
+                        btn.style.backgroundColor = '';
+                    }, 1500);
+                }, 1500);
+            }, 2000);
+        }
+
+        function updateKYCStatusDisplay() {
+            // Update SEPA status
+            if (kycLevels.sepa) {
+                const sepaStatus = document.getElementById('sepa-status');
+                if (sepaStatus) {
+                    sepaStatus.innerHTML = '✓ SEPA Level - Verified';
+                    sepaStatus.style.color = '#0ecb81';
+                }
+            }
+            
+            // Update AAA status
+            if (kycLevels.aaa) {
+                const aaaStatus = document.getElementById('aaa-status');
+                if (aaaStatus) {
+                    aaaStatus.innerHTML = '✓ AAA Level - Verified';
+                    aaaStatus.style.color = '#0ecb81';
+                }
+            }
+        }
+
         function goToStep3() {
             const commission = currentAmount * COMMISSION_RATE;
             const amountAfterCommission = currentAmount - commission;
             const usdtAmount = amountAfterCommission / EXCHANGE_RATE;
 
+            // Get destination label
+            const destinationLabels = {
+                'standard': 'Standard Transfer',
+                'europe': 'Send to Europe (SEPA)',
+                'aaa': 'Send to AAA (High Value Transfer)'
+            };
+
+            // Get KYC level used
+            const kycLevelLabels = {
+                'standard': 'BASE',
+                'europe': 'SEPA',
+                'aaa': 'AAA'
+            };
+
+            document.getElementById('final-destination').textContent = destinationLabels[selectedDestination];
             document.getElementById('final-amount-ars').textContent = `$${formatNumber(currentAmount)} ARS`;
             document.getElementById('final-commission-ars').textContent = `$${formatNumber(commission)} ARS`;
             document.getElementById('final-receive-usdt').textContent = `${formatNumber(usdtAmount, 4)} USDT`;
+
+            // Update KYC level info
+            const kycLevel = kycLevelLabels[selectedDestination];
+            document.getElementById('kyc-level-info').innerHTML = 
+                `✓ KYC <strong>${kycLevel}</strong> validated by <strong>SAK</strong> on <strong>Stellar Blockchain</strong>`;
 
             showStep(3);
         }
@@ -721,12 +1055,32 @@
         function newTransaction() {
             // Reset form
             document.getElementById('amount-input').value = '';
+            document.getElementById('destination-select').value = 'standard';
             currentAmount = 0;
+            selectedDestination = 'standard';
             document.getElementById('summary-box').style.display = 'none';
-            document.getElementById('btn-step-1').disabled = true;
+            document.getElementById('btn-step-2').disabled = true;
+            
+            // Reset Europe KYC form
+            document.getElementById('iban-input').value = '';
+            document.getElementById('bank-name-input').value = '';
+            document.getElementById('account-holder-input').value = '';
+            
+            // Reset AAA KYC form
+            document.getElementById('address-input').value = '';
+            document.getElementById('selfie-input').value = '';
+            document.getElementById('video-input').value = '';
+            document.getElementById('selfie-name').style.display = 'none';
+            document.getElementById('video-name').style.display = 'none';
+            uploadedFiles = { selfie: null, video: null };
             
             goToStep1();
         }
+
+        // Auto-start KYC verification when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            goToStep1();
+        });
     </script>
 </body>
 </html>
