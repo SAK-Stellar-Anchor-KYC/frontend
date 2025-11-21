@@ -1,5 +1,10 @@
-# SAK – Stellar Automated KYC Vault
-*A unified, secure and permission-based KYC system for Stellar Anchors.*
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/969c0de8-da7b-4a13-b549-66e5cbed576f" alt="video-Ancla" />
+</p>
+
+<h2 align="center">“Security You Can Anchor To.”</h2>
+
+
 
 ---
 
