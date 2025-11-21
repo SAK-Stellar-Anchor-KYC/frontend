@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { AnchorsCarousel } from '@/components/AnchorsCarousel';
 
 export default function LandingPage() {
   return (
@@ -119,7 +121,7 @@ export default function LandingPage() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-semibold text-dark-text mb-2">Base KYC</h3>
+                    <h3 className="text-2xl font-semibold text-dark-text mb-2">BASE KYC</h3>
                     <p className="text-dark-muted mb-4">
                       Basic identity verification for quick access to essential services.
                     </p>
@@ -153,13 +155,13 @@ export default function LandingPage() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-semibold text-dark-text mb-2">Intermediate KYC (SEPA)</h3>
+                    <h3 className="text-2xl font-semibold text-dark-text mb-2">SEPA KYC</h3>
                     <p className="text-dark-muted mb-4">
                       Enhanced verification for banking and financial services integration.
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <span className="px-3 py-1 bg-crypto-primary bg-opacity-20 border border-crypto-primary rounded-full text-sm text-crypto-primary">
-                        All Level 1 Fields
+                        All BASE KYC Fields
                       </span>
                       <span className="px-3 py-1 bg-dark-bg border border-dark-border rounded-full text-sm text-dark-text">
                         Selfie
@@ -184,13 +186,13 @@ export default function LandingPage() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-semibold text-dark-text mb-2">Advanced KYC (AAA)</h3>
+                    <h3 className="text-2xl font-semibold text-dark-text mb-2">AAA KYC</h3>
                     <p className="text-dark-muted mb-4">
                       Maximum trust level for institutional access and high-value transactions.
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <span className="px-3 py-1 bg-crypto-primary bg-opacity-20 border border-crypto-primary rounded-full text-sm text-crypto-primary">
-                        All Level 2 Fields
+                        All SEPA KYC Fields
                       </span>
                       <span className="px-3 py-1 bg-dark-bg border border-dark-border rounded-full text-sm text-dark-text">
                         Additional Documents
@@ -307,6 +309,32 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Anchors Carousel Section */}
+      <section className="py-12 bg-dark-bg overflow-hidden border-y border-dark-border">
+        <div className="container mx-auto px-4 mb-12">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-bold mb-6 text-dark-text">
+              Some of the Stellar&apos;s Anchors
+            </h2>
+          </div>
+        </div>
+        <AnchorsCarousel 
+          images={[
+            '/anchors/anchor1.png',
+            '/anchors/anchor2.png',
+            '/anchors/anchor3.png',
+            '/anchors/anchor4.png',
+            '/anchors/anchor5.png',
+            '/anchors/anchor6.png',
+            '/anchors/anchor7.png',
+            '/anchors/anchor8.png',
+            '/anchors/anchor9.png',
+            '/anchors/anchor10.png',	
+
+          ]}
+        />
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 bg-gradient-crypto">
         <div className="container mx-auto px-4">
@@ -334,9 +362,18 @@ export default function LandingPage() {
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-lg font-semibold text-crypto-primary mb-4">SAK Platform</h3>
+              <div className="flex items-center space-x-2 mb-4">
+                <Image
+                  src="/anchor-icon.png"
+                  alt="SAK Anchor"
+                  width={32}
+                  height={32}
+                  className="object-contain"
+                />
+                <span className="text-xl font-bold text-dark-text">SAK</span>
+              </div>
               <p className="text-sm text-dark-muted">
-                Decentralized identity verification powered by Stellar blockchain.
+              “Security You Can Anchor To.”
               </p>
             </div>
             <div>
@@ -350,7 +387,7 @@ export default function LandingPage() {
             <div>
               <h4 className="text-sm font-semibold text-crypto-primary mb-3">KYC Levels</h4>
               <ul className="space-y-2 text-sm text-dark-muted">
-                <li><Link href="/kyc/base" className="hover:text-crypto-primary transition-colors">Base KYC</Link></li>
+                <li><Link href="/kyc/base" className="hover:text-crypto-primary transition-colors">BASE KYC</Link></li>
                 <li><Link href="/kyc/sepa" className="hover:text-crypto-primary transition-colors">Intermediate KYC</Link></li>
                 <li><Link href="/kyc/aaa" className="hover:text-crypto-primary transition-colors">Advanced KYC</Link></li>
               </ul>

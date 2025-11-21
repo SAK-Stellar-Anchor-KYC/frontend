@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export const Footer: React.FC = () => {
   return (
@@ -10,9 +11,18 @@ export const Footer: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-lg font-semibold text-crypto-primary mb-4">SAK Platform</h3>
+              <div className="flex items-center space-x-2 mb-4">
+                <Image
+                  src="/anchor-icon.png"
+                  alt="SAK Anchor"
+                  width={32}
+                  height={32}
+                  className="object-contain"
+                />
+                <span className="text-xl font-bold text-dark-text">SAK</span>
+              </div>
               <p className="text-sm text-dark-muted">
-                Decentralized identity verification powered by Stellar blockchain.
+              “Security You Can Anchor To.”
               </p>
             </div>
             <div>

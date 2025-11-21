@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useWallet } from '@/hooks/useWallet';
 import { shortenPublicKey } from '@/lib/stellar';
 
@@ -14,7 +15,14 @@ export const Navbar: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-crypto rounded-lg"></div>
+            <Image
+              src="/anchor-icon.png"
+              alt="SAK Anchor"
+              width={32}
+              height={32}
+              className="object-contain"
+              priority
+            />
             <span className="text-xl font-bold text-dark-text">
               SAK
             </span>
