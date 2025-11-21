@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anchor - Convert ARS to USDT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0b0e11;
+            color: #eaecef;
+        }
+
+        .header {
+            background-color: #181a20;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #2b3139;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f0b90b;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-balance {
+            background-color: #2b3139;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #f0b90b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #0b0e11;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .wizard-container {
+            background-color: #181a20;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .wizard-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .wizard-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #eaecef;
+        }
+
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .wizard-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #2b3139;
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #2b3139;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #848e9c;
+        }
+
+        .step.active .step-number {
+            background-color: #f0b90b;
+            color: #0b0e11;
+        }
+
+        .step.completed .step-number {
+            background-color: #0ecb81;
+            color: #fff;
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #848e9c;
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: #f0b90b;
+            font-weight: 500;
+        }
+
+        .wizard-content {
+            display: none;
+        }
+
+        .wizard-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #848e9c;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #2b3139;
+            border: 1px solid #2b3139;
+            border-radius: 4px;
+            color: #eaecef;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #f0b90b;
+        }
+
+        .currency-label {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #848e9c;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .summary-box {
+            background-color: #2b3139;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+            padding-top: 12px;
+            border-top: 1px solid #474d57;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .summary-label {
+            color: #848e9c;
+        }
+
+        .summary-value {
+            color: #eaecef;
+        }
+
+        .summary-value.highlight {
+            color: #0ecb81;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background-color: #f0b90b;
+            color: #0b0e11;
+        }
+
+        .btn-secondary {
+            background-color: #2b3139;
+            color: #eaecef;
+            margin-top: 10px;
+        }
+
+        .kyc-status {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .kyc-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .kyc-message {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #eaecef;
+        }
+
+        .kyc-powered {
+            font-size: 14px;
+            color: #848e9c;
+            margin-bottom: 30px;
+        }
+
+        .kyc-powered strong {
+            color: #f0b90b;
+        }
+
+        .spinner {
+            border: 4px solid #2b3139;
+            border-top: 4px solid #f0b90b;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-icon {
+            color: #0ecb81;
+        }
+
+        .error-icon {
+            color: #f6465d;
+        }
+
+        .alert {
+            background-color: #2b3139;
+            border-left: 4px solid #f0b90b;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .alert-warning {
+            border-left-color: #f0b90b;
+        }
+
+        .alert-error {
+            border-left-color: #f6465d;
+        }
+
+        .exchange-rate {
+            text-align: center;
+            font-size: 14px;
+            color: #848e9c;
+            margin-bottom: 20px;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 12px;
+            color: #848e9c;
+            margin-top: 30px;
+        }
+
+        .success-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #0ecb81;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .success-checkmark::before {
+            content: '✓';
+            font-size: 48px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-title {
+            font-size: 24px;
+            color: #0ecb81;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .success-message {
+            font-size: 16px;
+            color: #848e9c;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .transaction-details {
+            background-color: #2b3139;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            color: #848e9c;
+        }
+
+        .detail-value {
+            color: #eaecef;
+            font-weight: 500;
+        }
+
+        .transaction-hash {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">⚓ Anchor</div>
+        <div class="user-info">
+            <div class="user-balance">
+                Balance: <strong>$125,430.50 ARS</strong>
+            </div>
+            <div class="user-avatar">JD</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="wizard-container">
+            <div class="wizard-header">
+                <h1 class="wizard-title">Convert ARS to USDT</h1>
+            </div>
+
+            <div class="wizard-steps">
+                <div class="step active" id="step-indicator-1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Amount</div>
+                </div>
+                <div class="step" id="step-indicator-2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">KYC Verification</div>
+                </div>
+                <div class="step" id="step-indicator-3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Confirmation</div>
+                </div>
+            </div>
+
+            <!-- Step 1: Amount Input -->
+            <div class="wizard-content active" id="step-1">
+                <div class="exchange-rate">
+                    Exchange rate: 1 USDT = 1,440.00 ARS
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Enter amount in Argentine Pesos</label>
+                    <div class="input-wrapper">
+                        <input type="number" class="form-input" id="amount-input" placeholder="0.00" min="0" step="0.01">
+                        <span class="currency-label">ARS</span>
+                    </div>
+                </div>
+
+                <div class="summary-box" id="summary-box" style="display: none;">
+                    <div class="summary-row">
+                        <span class="summary-label">Amount to convert:</span>
+                        <span class="summary-value" id="amount-ars">$0.00 ARS</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Fee (0.5%):</span>
+                        <span class="summary-value" id="commission-ars">$0.00 ARS</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">You will receive:</span>
+                        <span class="summary-value highlight" id="receive-usdt">0.00 USDT</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="btn-step-1" onclick="goToStep2()" disabled>
+                    Continue
+                </button>
+            </div>
+
+            <!-- Step 2: KYC Verification -->
+            <div class="wizard-content" id="step-2">
+                <!-- Loading state -->
+                <div class="kyc-status" id="kyc-loading">
+                    <div class="spinner"></div>
+                    <div class="kyc-message">Verifying your identity...</div>
+                    <div class="kyc-powered">
+                        Secure validation using <strong>Zero-Knowledge Proofs</strong><br>
+                        Powered by <strong>SAK on Stellar Blockchain</strong>
+                    </div>
+                </div>
+
+                <!-- KYC Valid -->
+                <div class="kyc-status" id="kyc-valid" style="display: none;">
+                    <div class="kyc-icon success-icon">✓</div>
+                    <div class="kyc-message">KYC Verified!</div>
+                    <div class="kyc-powered">
+                        ✨ KYC validated by <strong>SAK</strong> using Zero-Knowledge Proofs<br>
+                        Secured by <strong>Stellar Blockchain</strong>
+                    </div>
+                    <button class="btn btn-primary" onclick="goToStep3()">
+                        Continue to Confirmation
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Confirmation -->
+            <div class="wizard-content" id="step-3">
+                <div class="alert alert-warning">
+                    <p><strong>Review your transaction details</strong></p>
+                    <p style="margin-top: 8px; font-size: 13px;">Once confirmed, this operation cannot be reversed.</p>
+                </div>
+
+                <div class="summary-box">
+                    <div class="summary-row">
+                        <span class="summary-label">Amount to convert:</span>
+                        <span class="summary-value" id="final-amount-ars">$0.00 ARS</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Exchange rate:</span>
+                        <span class="summary-value">1 USDT = 1,440.00 ARS</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Fee (0.5%):</span>
+                        <span class="summary-value" id="final-commission-ars">$0.00 ARS</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">You will receive:</span>
+                        <span class="summary-value highlight" id="final-receive-usdt">0.00 USDT</span>
+                    </div>
+                </div>
+
+                <div class="kyc-powered" style="text-align: center; margin-bottom: 20px;">
+                    ✓ KYC validated by <strong>SAK</strong> on <strong>Stellar Blockchain</strong>
+                </div>
+
+                <button class="btn btn-primary" onclick="confirmTransaction()">
+                    Confirm Transaction
+                </button>
+                <button class="btn btn-secondary" onclick="goToStep1()">
+                    Cancel
+                </button>
+            </div>
+
+            <!-- Step 4: Success -->
+            <div class="wizard-content" id="step-4">
+                <div class="success-container">
+                    <div class="success-checkmark"></div>
+                    <h2 class="success-title">Transaction Successful!</h2>
+                    <p class="success-message">
+                        Your ARS to USDT conversion has been processed successfully.<br>
+                        Funds will be available in your wallet shortly.
+                    </p>
+
+                    <div class="transaction-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Amount converted:</span>
+                            <span class="detail-value" id="success-amount-ars">$0.00 ARS</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Fee applied:</span>
+                            <span class="detail-value" id="success-commission-ars">$0.00 ARS</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">USDT received:</span>
+                            <span class="detail-value" style="color: #0ecb81;" id="success-receive-usdt">0.00 USDT</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Transaction ID:</span>
+                            <span class="detail-value transaction-hash" id="transaction-id" style="font-family: monospace; font-size: 12px;" title="">-</span>
+                        </div>
+                    </div>
+
+                    <div class="kyc-powered" style="margin-bottom: 25px;">
+                        🔒 Transaction secured by <strong>Stellar Blockchain</strong><br>
+                        KYC verification validated by <strong>SAK</strong>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="newTransaction()">
+                        New Transaction
+                    </button>
+                </div>
+            </div>
+
+            <div class="footer-note">
+                This transaction is protected by blockchain technology
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const EXCHANGE_RATE = 1440.00; // 1 USDT = 1440 ARS
+        const COMMISSION_RATE = 0.005; // 0.5%
+        
+        let currentAmount = 0;
+        const hasKYC = true; // Siempre tiene KYC validado en esta versión
+
+        // Helper function to format numbers with thousand separators
+        function formatNumber(num, decimals = 2) {
+            const parts = num.toFixed(decimals).split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join('.');
+        }
+
+        // Amount input handler
+        document.getElementById('amount-input').addEventListener('input', function(e) {
+            const amount = parseFloat(e.target.value) || 0;
+            currentAmount = amount;
+
+            if (amount > 0) {
+                const commission = amount * COMMISSION_RATE;
+                const amountAfterCommission = amount - commission;
+                const usdtAmount = amountAfterCommission / EXCHANGE_RATE;
+
+                document.getElementById('amount-ars').textContent = `$${formatNumber(amount)} ARS`;
+                document.getElementById('commission-ars').textContent = `$${formatNumber(commission)} ARS`;
+                document.getElementById('receive-usdt').textContent = `${formatNumber(usdtAmount, 4)} USDT`;
+
+                document.getElementById('summary-box').style.display = 'block';
+                document.getElementById('btn-step-1').disabled = false;
+            } else {
+                document.getElementById('summary-box').style.display = 'none';
+                document.getElementById('btn-step-1').disabled = true;
+            }
+        });
+
+        function updateStepIndicator(step) {
+            for (let i = 1; i <= 3; i++) {
+                const indicator = document.getElementById(`step-indicator-${i}`);
+                indicator.classList.remove('active', 'completed');
+                
+                if (i < step) {
+                    indicator.classList.add('completed');
+                } else if (i === step) {
+                    indicator.classList.add('active');
+                }
+            }
+        }
+
+        function showStep(step) {
+            for (let i = 1; i <= 4; i++) {
+                const stepElement = document.getElementById(`step-${i}`);
+                if (stepElement) {
+                    stepElement.classList.remove('active');
+                }
+            }
+            document.getElementById(`step-${step}`).classList.add('active');
+            if (step <= 3) {
+                updateStepIndicator(step);
+            }
+        }
+
+        function goToStep1() {
+            showStep(1);
+        }
+
+        function goToStep2() {
+            showStep(2);
+            
+            // Reset KYC views
+            document.getElementById('kyc-loading').style.display = 'block';
+            document.getElementById('kyc-valid').style.display = 'none';
+
+            // Simulate API call to SAK - Always successful
+            setTimeout(() => {
+                document.getElementById('kyc-loading').style.display = 'none';
+                document.getElementById('kyc-valid').style.display = 'block';
+            }, 2000);
+        }
+
+        function goToStep3() {
+            const commission = currentAmount * COMMISSION_RATE;
+            const amountAfterCommission = currentAmount - commission;
+            const usdtAmount = amountAfterCommission / EXCHANGE_RATE;
+
+            document.getElementById('final-amount-ars').textContent = `$${formatNumber(currentAmount)} ARS`;
+            document.getElementById('final-commission-ars').textContent = `$${formatNumber(commission)} ARS`;
+            document.getElementById('final-receive-usdt').textContent = `${formatNumber(usdtAmount, 4)} USDT`;
+
+            showStep(3);
+        }
+
+        function confirmTransaction() {
+            const commission = currentAmount * COMMISSION_RATE;
+            const amountAfterCommission = currentAmount - commission;
+            const usdtAmount = amountAfterCommission / EXCHANGE_RATE;
+
+            // Generate blockchain-style transaction hash (64 hex characters)
+            const txId = '0x' + Array.from({length: 64}, () => 
+                Math.floor(Math.random() * 16).toString(16)
+            ).join('');
+
+            // Update success screen with transaction details
+            document.getElementById('success-amount-ars').textContent = `$${formatNumber(currentAmount)} ARS`;
+            document.getElementById('success-commission-ars').textContent = `$${formatNumber(commission)} ARS`;
+            document.getElementById('success-receive-usdt').textContent = `${formatNumber(usdtAmount, 4)} USDT`;
+            const txElement = document.getElementById('transaction-id');
+            txElement.textContent = txId;
+            txElement.setAttribute('title', txId); // Show full hash on hover
+
+            // Show success step
+            showStep(4);
+            
+            // Mark all steps as completed
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`step-indicator-${i}`).classList.add('completed');
+                document.getElementById(`step-indicator-${i}`).classList.remove('active');
+            }
+        }
+
+        function newTransaction() {
+            // Reset form
+            document.getElementById('amount-input').value = '';
+            currentAmount = 0;
+            document.getElementById('summary-box').style.display = 'none';
+            document.getElementById('btn-step-1').disabled = true;
+            
+            goToStep1();
+        }
+    </script>
+</body>
+</html>
