@@ -32,11 +32,11 @@ const getStatusBgColor = (status?: string) => {
 const getKycTitle = (kycType: string) => {
   switch (kycType) {
     case 'base':
-      return 'Base KYC (Level 1)';
+      return 'Base KYC';
     case 'sepa':
-      return 'SEPA KYC (Level 2)';
+      return 'SEPA KYC';
     case 'aaa':
-      return 'AAA KYC (Level 3)';
+      return 'AAA KYC';
     default:
       return 'KYC';
   }
@@ -82,6 +82,24 @@ export const KycStatusCard: React.FC<KycStatusCardProps> = ({
       <p className="text-sm text-dark-textMuted mb-4">
         {getKycDescription(kycType)}
       </p>
+
+      {/* Progress Bar */}
+      <div className="mb-4">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-xs font-medium text-dark-textMuted">Progress</span>
+          <span className="text-xs text-dark-textMuted">
+            {status === 'validated' ? '100%' : status === 'pending' ? '50%' : '0%'}
+          </span>
+        </div>
+        <div className="w-full bg-dark-bg rounded-full h-2">
+          <div 
+            className="bg-gradient-crypto h-2 rounded-full transition-all duration-500"
+            style={{ 
+              width: status === 'validated' ? '100%' : status === 'pending' ? '50%' : '0%' 
+            }}
+          ></div>
+        </div>
+      </div>
 
       {/* Status Info */}
       {isValidated && validatedAt && (

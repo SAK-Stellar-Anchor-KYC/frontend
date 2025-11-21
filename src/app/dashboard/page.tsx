@@ -46,20 +46,6 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* Progress */}
-        <div className="bg-dark-card border border-dark-border rounded-lg p-6">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="text-lg font-semibold text-dark-text">Verification Progress</h2>
-            <span className="text-sm text-dark-textMuted">{getCompletionPercentage().toFixed(0)}%</span>
-          </div>
-          <div className="w-full bg-dark-bg rounded-full h-3">
-            <div 
-              className="bg-gradient-crypto h-3 rounded-full transition-all duration-500"
-              style={{ width: `${getCompletionPercentage()}%` }}
-            ></div>
-          </div>
-        </div>
-
         {/* KYC Levels */}
         {loading ? (
           <div className="text-center py-12">
