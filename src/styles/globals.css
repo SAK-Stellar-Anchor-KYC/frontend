@@ -100,7 +100,7 @@ input[type="file"] {
 }
 
 .animate-scroll {
-  animation: scroll 30s linear infinite;
+  animation: scroll 45s linear infinite;
   display: flex;
   width: fit-content;
 }

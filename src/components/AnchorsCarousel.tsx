@@ -25,15 +25,15 @@ export const AnchorsCarousel: React.FC<AnchorsCarouselProps> = ({ images }) => {
         {duplicatedImages.map((image, index) => (
           <div
             key={index}
-            className="flex-shrink-0 -mx-12"
-            style={{ width: '600px', height: '300px' }}
+            className="flex-shrink-0 -mx-16"
+            style={{ width: '700px', height: '350px' }}
           >
             <div className="relative w-full h-full flex items-center justify-center">
               <Image
                 src={image}
                 alt={`Anchor ${index + 1}`}
-                width={600}
-                height={300}
+                width={700}
+                height={350}
                 className="object-contain w-full h-full"
                 unoptimized
               />

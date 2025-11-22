@@ -4,21 +4,29 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { AnchorsCarousel } from '@/components/AnchorsCarousel';
+import { Header } from '@/components/Header';
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-dark-bg via-dark-card to-dark-bg">
+      <Header />
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-crypto opacity-10"></div>
+      <section className="relative overflow-hidden bg-black">
         <div className="container mx-auto px-4 py-20 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              SAK Platform
-            </h1>
-            <p className="text-2xl md:text-3xl text-dark-text mb-4 font-semibold">
-              Stellar Authentication & KYC
-            </p>
+            <div className="mb-6 flex justify-center bg-black rounded-lg p-4">
+              <video
+                src="/anchors/sak-platform-logo.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="object-contain w-full max-w-[800px] h-auto"
+              >
+                Tu navegador no soporta el elemento de video.
+              </video>
+            </div>
+          
             <p className="text-xl text-dark-muted mb-8 max-w-2xl mx-auto">
               The next generation of decentralized identity verification built on the Stellar blockchain
             </p>
@@ -259,50 +267,9 @@ export default function LandingPage() {
                   <span className="text-2xl font-bold text-white">4</span>
                 </div>
                 <h3 className="text-lg font-semibold text-dark-text mb-2">Get Verified</h3>
-                <p className="text-sm text-dark-muted mb-3">
+                <p className="text-sm text-dark-muted">
                   Receive your verification status and access blockchain services instantly.
                 </p>
-                <a
-                  href="https://anchors.stellar.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center text-sm text-crypto-primary hover:text-crypto-primaryHover transition-colors"
-                >
-                  View Stellar Anchors
-                  <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust & Security Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6 text-dark-text">
-              Built on Trust & Security
-            </h2>
-            <p className="text-lg text-dark-muted mb-8">
-              SAK leverages the power of the Stellar blockchain to provide a transparent, 
-              secure, and decentralized identity verification system. Your data remains yours, 
-              protected by military-grade encryption and blockchain immutability.
-            </p>
-            <div className="grid md:grid-cols-3 gap-6 mt-12">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-crypto-primary mb-2">256-bit</div>
-                <p className="text-dark-muted">Encryption Standard</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-crypto-primary mb-2">100%</div>
-                <p className="text-dark-muted">Data Ownership</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-crypto-primary mb-2">24/7</div>
-                <p className="text-dark-muted">Blockchain Security</p>
               </div>
             </div>
           </div>
@@ -324,13 +291,6 @@ export default function LandingPage() {
             '/anchors/anchor2.png',
             '/anchors/anchor3.png',
             '/anchors/anchor4.png',
-            '/anchors/anchor5.png',
-            '/anchors/anchor6.png',
-            '/anchors/anchor7.png',
-            '/anchors/anchor8.png',
-            '/anchors/anchor9.png',
-            '/anchors/anchor10.png',	
-
           ]}
         />
       </section>
