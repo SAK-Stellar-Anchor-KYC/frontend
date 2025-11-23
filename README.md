@@ -1,6 +1,6 @@
 
 
-<h2 align="center">“Security You Can Anchor To.”</h2>
+<h2 align="center">Security You Can Anchor To.</h2>
 
 
 
