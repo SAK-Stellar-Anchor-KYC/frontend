@@ -158,4 +158,4 @@ User → Frontend → API → Vault/DB → Anchor (mock SEP-12 request) → Stel
 - Diego Raúl Barrionuevo – Smart Contracts
 
 **Links**
-- GitHub: https://github.com/SAK-Stellar-Anchor-KYC
+- Platform: (https://sakfrontendv2.vercel.app/landing)
